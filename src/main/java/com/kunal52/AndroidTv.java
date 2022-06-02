@@ -148,7 +148,7 @@ public class AndroidTv {
     }
 
 
-    interface AndroidTvListener {
+    public interface AndroidTvListener {
         void onSessionCreated();
 
         void onSecretRequested();
