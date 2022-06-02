@@ -32,8 +32,8 @@ import javax.security.auth.x500.X500Principal;
 public final class KeyStoreManager {
     private static String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final boolean DEBUG = false;
-    private static final String KEYSTORE_FILENAME = "androidtv.keystore";
-    private static final char[] KEYSTORE_PASSWORD = "KeyStore_Password".toCharArray();
+    public static final String KEYSTORE_FILENAME = "androidtv.keystore";
+    static final char[] KEYSTORE_PASSWORD = "KeyStore_Password".toCharArray();
     private static final String LOCAL_IDENTITY_ALIAS = "androidtv-remote";
     private static final String REMOTE_IDENTITY_ALIAS_PATTERN = "androidtv-remote-%s";
     private static final String SERVER_IDENTITY_ALIAS = "androidtv-local";
