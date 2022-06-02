@@ -74,4 +74,15 @@ public class RemoteMessageManager extends MessageManager {
         return bArr;
     }
 
+    public byte[] createKeyCommand(Remotemessage.RemoteKeyCode keyCode, Remotemessage.RemoteDirection remoteDirection) {
+        Remotemessage.RemoteMessage remoteMessage = Remotemessage.RemoteMessage.newBuilder()
+                .setRemoteKeyInject(Remotemessage.RemoteKeyInject.newBuilder()
+                        .setKeyCode(keyCode)
+                        .setDirection(remoteDirection)
+                        .build())
+                .build();
+
+        return addLengthAndCreate(remoteMessage.toByteArray());
+    }
+
 }

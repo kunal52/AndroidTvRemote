@@ -4,6 +4,7 @@ import com.kunal52.exception.PairingException;
 import com.kunal52.pairing.PairingListener;
 import com.kunal52.pairing.PairingSession;
 import com.kunal52.remote.RemoteSession;
+import com.kunal52.remote.Remotemessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +14,10 @@ import java.security.GeneralSecurityException;
 
 import static com.kunal52.ssl.KeyStoreManager.KEYSTORE_FILENAME;
 
-/**
- * Hello world!
- */
-public class AndroidTv {
 
-    private final Logger logger = LoggerFactory.getLogger(AndroidTv.class);
+public class AndroidRemoteTv {
+
+    private final Logger logger = LoggerFactory.getLogger(AndroidRemoteTv.class);
 
     private PairingSession mPairingSession;
 
@@ -92,55 +91,59 @@ public class AndroidTv {
 
         if (Paths.get(KEYSTORE_FILENAME).toFile().exists())
             mRemoteSession.connect();
-        else
+        else {
             mPairingSession = new PairingSession();
+            mPairingSession.pair("192.168.1.8", 6467, new PairingListener() {
+                @Override
+                public void onSessionCreated() {
 
-        mPairingSession.pair("192.168.1.8", 6467, new PairingListener() {
-            @Override
-            public void onSessionCreated() {
-
-            }
-
-            @Override
-            public void onPerformInputDeviceRole() throws PairingException {
-
-            }
-
-            @Override
-            public void onPerformOutputDeviceRole(byte[] gamma) throws PairingException {
-
-            }
-
-            @Override
-            public void onSecretRequested() {
-                androidTvListener.onSecretRequested();
-            }
-
-            @Override
-            public void onSessionEnded() {
-
-            }
-
-            @Override
-            public void onError(String message) {
-
-            }
-
-            @Override
-            public void onPaired() {
-                try {
-                    mRemoteSession.connect();
-                } catch (GeneralSecurityException | IOException | InterruptedException | PairingException e) {
-                    throw new RuntimeException(e);
                 }
-            }
 
-            @Override
-            public void onLog(String message) {
+                @Override
+                public void onPerformInputDeviceRole() throws PairingException {
 
-            }
-        });
+                }
 
+                @Override
+                public void onPerformOutputDeviceRole(byte[] gamma) throws PairingException {
+
+                }
+
+                @Override
+                public void onSecretRequested() {
+                    androidTvListener.onSecretRequested();
+                }
+
+                @Override
+                public void onSessionEnded() {
+
+                }
+
+                @Override
+                public void onError(String message) {
+
+                }
+
+                @Override
+                public void onPaired() {
+                    try {
+                        mRemoteSession.connect();
+                    } catch (GeneralSecurityException | IOException | InterruptedException | PairingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                @Override
+                public void onLog(String message) {
+
+                }
+            });
+        }
+
+    }
+
+    public void sendCommand(Remotemessage.RemoteKeyCode remoteKeyCode, Remotemessage.RemoteDirection remoteDirection){
+        mRemoteSession.sendCommand(remoteKeyCode, remoteDirection);
     }
 
     public void setSecret(String code) {

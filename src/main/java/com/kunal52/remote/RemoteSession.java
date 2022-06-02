@@ -1,6 +1,5 @@
 package com.kunal52.remote;
 
-import com.kunal52.AndroidTv;
 import com.kunal52.ssl.KeyStoreManager;
 import com.kunal52.exception.PairingException;
 import com.kunal52.ssl.DummyTrustManager;
@@ -12,10 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class RemoteSession {
 
@@ -34,6 +31,8 @@ public class RemoteSession {
     private final RemoteSessionListener mRemoteSessionListener;
 
     int retry;
+
+    OutputStream outputStream;
 
     public RemoteSession(String host, int port, RemoteSessionListener remoteSessionListener) {
         mMessageQueue = new LinkedBlockingQueue<>();
@@ -56,12 +55,11 @@ public class RemoteSession {
             sSLSocket.setTcpNoDelay(true);
             sSLSocket.startHandshake();
 
-
-            final OutputStream outputStream = sSLSocket.getOutputStream();
+            outputStream = sSLSocket.getOutputStream();
             new RemotePacketParser(sSLSocket.getInputStream(), outputStream, mMessageQueue, new RemoteListener() {
                 @Override
                 public void onConnected() {
-                    System.out.println("Connected ");
+                    mRemoteSessionListener.onConnected();
                 }
 
                 @Override
@@ -134,6 +132,15 @@ public class RemoteSession {
             connect();
         } catch (GeneralSecurityException | IOException | InterruptedException | PairingException e) {
             mRemoteSessionListener.onError(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void sendCommand(Remotemessage.RemoteKeyCode remoteKeyCode, Remotemessage.RemoteDirection remoteDirection) {
+        try {
+            outputStream.write(mMessageManager.createKeyCommand(remoteKeyCode,remoteDirection));
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

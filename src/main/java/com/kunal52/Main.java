@@ -1,6 +1,7 @@
 package com.kunal52;
 
 import com.kunal52.exception.PairingException;
+import com.kunal52.remote.Remotemessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +10,8 @@ import java.security.GeneralSecurityException;
 
 public class Main {
     public static void main(String[] args) throws GeneralSecurityException, IOException, InterruptedException, PairingException {
-        AndroidTv androidTv = new AndroidTv();
-        androidTv.connect("192.168.1.8", new AndroidTv.AndroidTvListener() {
+        AndroidRemoteTv androidRemoteTv = new AndroidRemoteTv();
+        androidRemoteTv.connect("192.168.1.8", new AndroidRemoteTv.AndroidTvListener() {
             @Override
             public void onSessionCreated() {
 
@@ -24,7 +25,7 @@ public class Main {
                 // Reading data using readLine
                 try {
                     String name = reader.readLine();
-                    androidTv.setSecret(name);
+                    androidRemoteTv.setSecret(name);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -42,7 +43,7 @@ public class Main {
 
             @Override
             public void onConnected() {
-                System.out.println("Connected");
+
             }
 
             @Override
