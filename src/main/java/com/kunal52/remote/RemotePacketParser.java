@@ -17,6 +17,8 @@ public class RemotePacketParser extends PacketParser {
 
     private final RemoteListener mRemoteListener;
 
+    private boolean isConnected = false;
+
     public RemotePacketParser(InputStream inputStream, OutputStream outputStream, BlockingQueue<Remotemessage.RemoteMessage> messageQueue, RemoteListener remoteListener) {
         super(inputStream);
         mOutputStream = outputStream;
@@ -42,7 +44,9 @@ public class RemotePacketParser extends PacketParser {
                 throw new RuntimeException(e);
             }
         } else if (remoteMessage.hasRemoteStart()) {
-            mRemoteListener.onConnected();
+            if (!isConnected)
+                mRemoteListener.onConnected();
+            isConnected = true;
         } else {
             try {
                 mMessageQueue.put(remoteMessage);

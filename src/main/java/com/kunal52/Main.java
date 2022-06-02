@@ -43,6 +43,14 @@ public class Main {
 
             @Override
             public void onConnected() {
+                System.out.println("Connected");
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                androidRemoteTv.sendCommand(Remotemessage.RemoteKeyCode.KEYCODE_POWER, Remotemessage.RemoteDirection.SHORT);
 
             }
 

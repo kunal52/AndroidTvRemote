@@ -33,48 +33,7 @@ public class AndroidRemoteTv {
 
             @Override
             public void onSslError() throws GeneralSecurityException, IOException, InterruptedException, PairingException {
-//                mPairingSession.pair(host, 6467, new PairingListener() {
-//                    @Override
-//                    public void onSessionCreated() {
-//                        logger.info("Pairing Session created");
-//                    }
-//
-//                    @Override
-//                    public void onPerformInputDeviceRole() throws PairingException {
-//                        logger.info("Pairing Session created");
-//                    }
-//
-//                    @Override
-//                    public void onPerformOutputDeviceRole(byte[] gamma) throws PairingException {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSecretRequested() {
-//                        logger.info("Secret Requested");
-//                        androidTvListener.onSecretRequested();
-//                    }
-//
-//                    @Override
-//                    public void onSessionEnded() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(String message) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPaired() {
-//                    //    mRemoteSession.attemptToReconnect();
-//                    }
-//
-//                    @Override
-//                    public void onLog(String message) {
-//
-//                    }
-//                });
+
             }
 
             @Override
