@@ -88,6 +88,48 @@ public class AndroidTv {
         });
 
 
+//        mPairingSession.pair("192.168.1.8", 6467, new PairingListener() {
+//            @Override
+//            public void onSessionCreated() {
+//
+//            }
+//
+//            @Override
+//            public void onPerformInputDeviceRole() throws PairingException {
+//
+//            }
+//
+//            @Override
+//            public void onPerformOutputDeviceRole(byte[] gamma) throws PairingException {
+//
+//            }
+//
+//            @Override
+//            public void onSecretRequested() {
+//                androidTvListener.onSecretRequested();
+//            }
+//
+//            @Override
+//            public void onSessionEnded() {
+//
+//            }
+//
+//            @Override
+//            public void onError(String message) {
+//
+//            }
+//
+//            @Override
+//            public void onPaired() {
+//
+//            }
+//
+//            @Override
+//            public void onLog(String message) {
+//
+//            }
+//        });
+
         mRemoteSession.connect();
 
     }
