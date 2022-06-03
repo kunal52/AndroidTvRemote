@@ -1,16 +1,14 @@
-package com.kunal52;
 
-import com.kunal52.exception.PairingException;
-import com.kunal52.remote.Remotemessage;
+# AndroidTvRemote
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
+_Note: This is a prereleased version._
 
-public class Main {
-    public static void main(String[] args) throws GeneralSecurityException, IOException, InterruptedException, PairingException {
-        AndroidRemoteTv androidRemoteTv = new AndroidRemoteTv();
+AndroidTvRemote is an open-source java library to control android tv.
+
+## Usage
+
+```java
+ AndroidRemoteTv androidRemoteTv = new AndroidRemoteTv();
         androidRemoteTv.connect("192.168.1.8", new AndroidRemoteTv.AndroidTvListener() {
             @Override
             public void onSessionCreated() {
@@ -43,7 +41,7 @@ public class Main {
             @Override
             public void onConnected() {
                 System.out.println("Connected");
-
+                
                 androidRemoteTv.sendCommand(Remotemessage.RemoteKeyCode.KEYCODE_POWER, Remotemessage.RemoteDirection.SHORT);
 
             }
@@ -58,5 +56,4 @@ public class Main {
 
             }
         });
-    }
-}
+```

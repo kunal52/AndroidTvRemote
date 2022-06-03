@@ -105,10 +105,9 @@ public class AndroidRemoteTv {
         mRemoteSession.sendCommand(remoteKeyCode, remoteDirection);
     }
 
-    public void setSecret(String code) {
+    public void sendSecret(String code) {
         mPairingSession.provideSecret(code);
     }
-
 
     public interface AndroidTvListener {
         void onSessionCreated();
