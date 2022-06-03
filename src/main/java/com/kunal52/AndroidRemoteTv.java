@@ -15,9 +15,11 @@ import java.security.GeneralSecurityException;
 import static com.kunal52.ssl.KeyStoreManager.KEYSTORE_FILENAME;
 
 
-public class AndroidRemoteTv {
+public class AndroidRemoteTv extends BaseAndroidRemoteTv {
 
     private final Logger logger = LoggerFactory.getLogger(AndroidRemoteTv.class);
+
+    private AndroidRemoteContext androidRemoteContext;
 
     private PairingSession mPairingSession;
 
@@ -25,6 +27,7 @@ public class AndroidRemoteTv {
 
     public void connect(String host, AndroidTvListener androidTvListener) throws GeneralSecurityException, IOException, InterruptedException, PairingException {
 
+        androidRemoteContext = AndroidRemoteContext.getInstance();
         mRemoteSession = new RemoteSession(host, 6466, new RemoteSession.RemoteSessionListener() {
             @Override
             public void onConnected() {
@@ -46,7 +49,6 @@ public class AndroidRemoteTv {
 
             }
         });
-
 
         if (Paths.get(KEYSTORE_FILENAME).toFile().exists())
             mRemoteSession.connect();
@@ -101,7 +103,7 @@ public class AndroidRemoteTv {
 
     }
 
-    public void sendCommand(Remotemessage.RemoteKeyCode remoteKeyCode, Remotemessage.RemoteDirection remoteDirection){
+    public void sendCommand(Remotemessage.RemoteKeyCode remoteKeyCode, Remotemessage.RemoteDirection remoteDirection) {
         mRemoteSession.sendCommand(remoteKeyCode, remoteDirection);
     }
 

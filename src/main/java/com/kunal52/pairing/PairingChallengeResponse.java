@@ -1,7 +1,7 @@
 package com.kunal52.pairing;
 
 import com.kunal52.exception.PairingException;
-import com.kunal52.Utils.Utils;
+import com.kunal52.util.Utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

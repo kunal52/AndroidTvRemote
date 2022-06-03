@@ -1,4 +1,4 @@
-package com.kunal52.Utils;
+package com.kunal52.util;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;

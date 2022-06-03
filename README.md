@@ -57,3 +57,5 @@ AndroidTvRemote is an open-source java library to control android tv.
             }
         });
 ```
+
+Refer this Android Page for more commands -  https://developer.android.com/reference/android/view/KeyEvent

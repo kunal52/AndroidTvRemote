@@ -1,6 +1,7 @@
 package com.kunal52.pairing;
 
-import com.kunal52.Utils.Utils;
+import com.kunal52.AndroidRemoteContext;
+import com.kunal52.util.Utils;
 import com.kunal52.exception.PairingException;
 import com.kunal52.ssl.DummyTrustManager;
 import com.kunal52.ssl.KeyStoreManager;
@@ -15,20 +16,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 
 public class PairingSession {
 
     private final Logger logger = LoggerFactory.getLogger(PairingSession.class);
 
-    private static final int SECRET_POLL_TIMEOUT_MS = 500;
-
     private final BlockingQueue<Pairingmessage.PairingMessage> mMessagesQueue;
 
     private final PairingMessageManager mPairingMessageManager;
+
+    SecretProvider secretProvider;
 
     private SSLSocket mSslSocket;
 
@@ -56,11 +58,10 @@ public class PairingSession {
 
         final OutputStream outputStream = sSLSocket.getOutputStream();
 
-        byte[] pairingMessage = mPairingMessageManager.createPairingMessage("pc", "com.atv");
-      //  byte[]pairingMessage = new byte[]{21, 8, 2, 16, (byte) 200, 1, 82, 14, 10, 12, 83, 101, 114, 118, 105, 99, 101, 32, 78, 97, 109, 101};
+        byte[] pairingMessage = mPairingMessageManager.createPairingMessage(AndroidRemoteContext.getInstance().getClientName(), AndroidRemoteContext.getInstance().getServiceName());
         outputStream.write(pairingMessage);
         Pairingmessage.PairingMessage pairingMessageResponse = waitForMessage();
-   //     logReceivedMessage(pairingMessageResponse.toString());
+        logReceivedMessage(pairingMessageResponse.toString());
 
         byte[] pairingOption = new PairingMessageManager().createPairingOption();
         outputStream.write(pairingOption);
@@ -72,6 +73,8 @@ public class PairingSession {
         Pairingmessage.PairingMessage pairingConfigAck = waitForMessage();
         logReceivedMessage(pairingConfigAck.toString());
 
+        if (secretProvider != null)
+            secretProvider.requestSecret(this);
         pairingListener.onSecretRequested();
         logger.info("Waiting for secret");
         Pairingmessage.PairingMessage pairingSecretMessage = waitForMessage();
