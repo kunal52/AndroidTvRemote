@@ -11,7 +11,7 @@ import java.security.GeneralSecurityException;
 public class Main {
     public static void main(String[] args) throws GeneralSecurityException, IOException, InterruptedException, PairingException {
         AndroidRemoteTv androidRemoteTv = new AndroidRemoteTv();
-        androidRemoteTv.connect("192.168.1.8", new AndroidRemoteTv.AndroidTvListener() {
+        androidRemoteTv.connect("192.168.1.8", new AndroidTvListener() {
             @Override
             public void onSessionCreated() {
 

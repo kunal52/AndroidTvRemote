@@ -9,25 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
-
-import static com.kunal52.ssl.KeyStoreManager.KEYSTORE_FILENAME;
 
 
 public class AndroidRemoteTv extends BaseAndroidRemoteTv {
 
     private final Logger logger = LoggerFactory.getLogger(AndroidRemoteTv.class);
 
-    private AndroidRemoteContext androidRemoteContext;
-
     private PairingSession mPairingSession;
 
     private RemoteSession mRemoteSession;
 
     public void connect(String host, AndroidTvListener androidTvListener) throws GeneralSecurityException, IOException, InterruptedException, PairingException {
-
-        androidRemoteContext = AndroidRemoteContext.getInstance();
         mRemoteSession = new RemoteSession(host, 6466, new RemoteSession.RemoteSessionListener() {
             @Override
             public void onConnected() {
@@ -35,7 +28,7 @@ public class AndroidRemoteTv extends BaseAndroidRemoteTv {
             }
 
             @Override
-            public void onSslError() throws GeneralSecurityException, IOException, InterruptedException, PairingException {
+            public void onSslError()  {
 
             }
 
@@ -50,7 +43,7 @@ public class AndroidRemoteTv extends BaseAndroidRemoteTv {
             }
         });
 
-        if (Paths.get(KEYSTORE_FILENAME).toFile().exists())
+        if (AndroidRemoteContext.getInstance().getKeyStoreFile().exists())
             mRemoteSession.connect();
         else {
             mPairingSession = new PairingSession();
@@ -111,19 +104,4 @@ public class AndroidRemoteTv extends BaseAndroidRemoteTv {
         mPairingSession.provideSecret(code);
     }
 
-    public interface AndroidTvListener {
-        void onSessionCreated();
-
-        void onSecretRequested();
-
-        void onPaired();
-
-        void onConnectingToRemote();
-
-        void onConnected();
-
-        void onDisconnect();
-
-        void onError(String error);
-    }
 }

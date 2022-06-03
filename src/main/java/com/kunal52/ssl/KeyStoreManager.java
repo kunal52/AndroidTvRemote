@@ -1,6 +1,7 @@
 package com.kunal52.ssl;
 
 
+import com.kunal52.AndroidRemoteContext;
 import com.kunal52.ssl.SslUtil;
 
 import java.io.FileOutputStream;
@@ -32,14 +33,16 @@ import javax.security.auth.x500.X500Principal;
 public final class KeyStoreManager {
     private static String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final boolean DEBUG = false;
-    public static final String KEYSTORE_FILENAME = "androidtv.keystore";
-    static final char[] KEYSTORE_PASSWORD = "KeyStore_Password".toCharArray();
+    //    public static final String KEYSTORE_FILENAME = "androidtv.keystore";
+//    static final char[] KEYSTORE_PASSWORD = "KeyStore_Password".toCharArray();
     private static final String LOCAL_IDENTITY_ALIAS = "androidtv-remote";
     private static final String REMOTE_IDENTITY_ALIAS_PATTERN = "androidtv-remote-%s";
     private static final String SERVER_IDENTITY_ALIAS = "androidtv-local";
     private static final String TAG = "KeyStoreManager";
     private DynamicTrustManager mDynamicTrustManager;
     private KeyStore mKeyStore;
+
+    private AndroidRemoteContext androidRemoteContext = AndroidRemoteContext.getInstance();
 
     /* renamed from: sensustech.android.tv.remote.control.manager.keystore.KeyStoreManager$DynamicTrustManager */
     /* loaded from: classes3.dex */
@@ -135,7 +138,7 @@ public final class KeyStoreManager {
         if (!useAndroidKeyStore()) {
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             try {
-                keyStore.load(null, KEYSTORE_PASSWORD);
+                keyStore.load(null, androidRemoteContext.getKeyStorePass());
             } catch (IOException e) {
                 throw new GeneralSecurityException("Unable to create empty keyStore", e);
             }
@@ -185,7 +188,7 @@ public final class KeyStoreManager {
         try {
             if (!useAndroidKeyStore()) {
                 keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                keyStore.load(Files.newInputStream(Paths.get(KEYSTORE_FILENAME)), KEYSTORE_PASSWORD);
+                keyStore.load(Files.newInputStream(androidRemoteContext.getKeyStoreFile().toPath()), androidRemoteContext.getKeyStorePass());
             } else {
                 keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
                 keyStore.load(null);
@@ -210,8 +213,8 @@ public final class KeyStoreManager {
     private void store(KeyStore keyStore) {
         if (!useAndroidKeyStore()) {
             try {
-                FileOutputStream openFileOutput = new FileOutputStream(KEYSTORE_FILENAME);
-                keyStore.store(openFileOutput, KEYSTORE_PASSWORD);
+                FileOutputStream openFileOutput = new FileOutputStream(androidRemoteContext.getKeyStoreFile());
+                keyStore.store(openFileOutput, androidRemoteContext.getKeyStorePass());
                 openFileOutput.close();
             } catch (IOException e) {
                 throw new IllegalStateException("Unable to store keyStore", e);
